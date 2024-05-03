@@ -1,0 +1,25 @@
+syntax = "proto3";
+option go_package = ".;calculator";
+
+service Calculator {
+    rpc GetSum(SumRequest) returns (SumResponse) {}
+    rpc GetAverage(AverageRequest) returns (AverageResponse) {}
+}
+
+message SumRequest {
+    int32 FirstNumber = 1;
+    int32 SecondNumber = 2;
+}
+
+message SumResponse {
+    int32 Result = 1;
+}
+
+message AverageRequest {
+    float FirstNumber = 1;
+    float SecondNumber = 2;
+}
+
+message AverageResponse {
+    float Result = 1;
+}

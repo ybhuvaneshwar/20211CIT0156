@@ -1,0 +1,35 @@
+version: "1.0"
+
+stages:
+  - "clone"
+  - "build"
+  - "test"
+
+steps:
+  clone:
+    title: "Cloning repository"
+    type: "git-clone"
+    repo: "nikimanoledaki/calculator-microservice"
+    revision: "${{CF_BRANCH}}"
+    git: "github"
+    stage: "clone"
+
+  MyAppDockerImage:
+    title: "Building Docker image"
+    type: "build"
+    image_name: "niki2401/calculator-microservice"
+    working_directory: "${{clone}}"
+    tag: "${{CF_BRANCH_TAG_NORMALIZED}}"
+    dockerfile: "build/Dockerfile"
+    stage: "build"
+
+  test:
+    title: "Running test"
+    type: "freestyle"
+    image: "${{MyAppDockerImage}}"
+    working_directory: "${{clone}}"
+    commands:
+      - "go get github.com/onsi/ginkgo/ginkgo@v1.13.0"
+      - "go get github.com/onsi/gomega/..."
+      - "ginkgo -r"
+    stage: "test"
